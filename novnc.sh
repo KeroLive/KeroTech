@@ -60,7 +60,7 @@ clear
  #docker run --rm -d --network host --privileged --name nomachine-xfce4-kali -e PASSWORD=123456 -e USER=kero --cap-add=SYS_PTRACE --shm-size=1g thuonghai2711/nomachine-kali-desktop:latest
 
 #docker run --rm -d --network host --privileged --name nomachine-xfce4 -e PASSWORD=123456 -e USER=kero --cap-add=SYS_PTRACE --shm-size=1g thuonghai2711/nomachine-ubuntu-desktop:windows10
-DOCKER_CMD=""
+DOCKER_CMD="docker run --privileged --shm-size 1g -d -p 4000:10000 -e VNC_PASSWD=kero-e PORT=10000 -e AUDIO_PORT=1699 -e WEBSOCKIFY_PORT=6900 -e VNC_PORT=5900 -e SCREEN_WIDTH=1024 -e SCREEN_HEIGHT=768 -e SCREEN_DEPTH=24 thuonghai2711/ubuntu-novnc-pulseaudio:20.04"
 
 #docker run --rm -d --network host --privileged --name nomachine-xfce4 -e PASSWORD=123456 -e USER=kero --cap-add=SYS_PTRACE --shm-size=1g thuonghai2711/nomachine-ubuntu-desktop:windows10
 
