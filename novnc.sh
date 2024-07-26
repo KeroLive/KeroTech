@@ -3,15 +3,13 @@
 # Install dependencies
 sudo su &
 sudo apt update
-apt-get install ruby -y
+apt-get install ruby openvpn figlet ruby wget unzip -y
 wget https://github.com/busyloop/lolcat/archive/master.zip
 unzip master.zip
 cd lolcat-master/bin/
 gem install lolcat
-sudo apt install figlet -y
 pip install git+https://github.com/tehmaze/lolcat.git
-sudo apt update
-sudo apt install -y openvpn figlet ruby wget unzip
+
 
 # Function to handle saving the configuration to the script itself
 save_config() {
