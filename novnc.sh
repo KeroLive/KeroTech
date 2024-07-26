@@ -70,7 +70,7 @@ DOCKER_CMD="docker run --privileged --shm-size 1g -d -p 4000:10000 -e VNC_PASSWD
 # تنفيذ الأمر Docker
 eval $DOCKER_CMD
 clear
-sleep 40
+sleep 20
 figlet  "The Password Is : kero" -c  | lolcat -a
 figlet  "Thanks For You From Kyrolos Hany Enjoy Your RDP :)" -c  | lolcat -a
 #sudo openvpn --config /etc/openvpn/client.conf 
