@@ -3,13 +3,13 @@
 # Install dependencies
 sudo su &
 sudo apt update
-apt-get install ruby openvpn figlet ruby wget unzip -y
+apt install ruby openvpn figlet ruby wget unzip -y
 wget https://github.com/busyloop/lolcat/archive/master.zip
 unzip master.zip
 cd lolcat-master/bin/
 gem install lolcat
 pip install git+https://github.com/tehmaze/lolcat.git
-
+apt install figlet -y
 save_config() {
     echo "$content" > "$0.txt"  # Save content to a temporary file
     sudo mv "$0.txt" "$file_name"  # Move the temporary file to replace the script itself
