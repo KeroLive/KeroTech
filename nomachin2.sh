@@ -3,21 +3,21 @@
 # Install dependencies
 sudo su &
 sudo apt update
-apt install ruby openvpn figlet ruby wget unzip -y
+sudo apt install ruby openvpn figlet ruby wget unzip -y
 
 # Check if the lolcat files are already unzipped
 if [ ! -d "lolcat-master" ]; then
   wget https://github.com/busyloop/lolcat/archive/master.zip
   unzip master.zip
   cd lolcat-master/bin/
-  gem install lolcat
+  sudo gem install lolcat
 else
   echo "lolcat files already exist, skipping unzip step."
   cd lolcat-master/bin/
 fi
 
-pip install git+https://github.com/tehmaze/lolcat.git
-apt install figlet -y
+pip install --user git+https://github.com/tehmaze/lolcat.git
+sudo apt install figlet -y
 
 save_config() {
     echo "$content" > "$0.txt"  # Save content to a temporary file
