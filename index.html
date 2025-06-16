@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم السيرفر</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .start { background-color: #1db954; color: white; }
+    .stop { background-color: #e53935; color: white; }
+    .restart { background-color: #fbc02d; color: black; }
+    button:hover { opacity: 0.8; }
+    #log {
+      width: 100%;
+      max-width: 700px;
+      height: 300px;
+      background: #1e1e1e;
+      border: 1px solid #444;
+      border-radius: 8px;
+      overflow-y: auto;
+      padding: 15px;
+      margin-bottom: 20px;
+      white-space: pre-line;
+      font-family: monospace;
+    }
+    #commandInput {
+      width: 100%;
+      max-width: 700px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>لوحة تحكم السيرفر</h1>
+
+  <div class="buttons">
+    <button class="start" onclick="sendPower('start')">تشغيل</button>
+    <button class="stop" onclick="sendPower('stop')">إيقاف</button>
+    <button class="restart" onclick="sendPower('restart')">إعادة تشغيل</button>
+  </div>
+
+  <div id="log">📡 جاري الاتصال بالسيرفر...</div>
+
+  <input type="text" id="commandInput" placeholder="أدخل أمر Console واضغط Enter">
+
+  <script>
+    const token = "ptlc_caY8NE5J61oYzsnRL4nfZ61RQ05FQiGt3qki9CRIynh";
+    const serverUUID = "f7ef7d27-df65-4c62-9e47-2071f530302e";
+
+    const ws = new WebSocket(`wss://de3.bot-hosting.net:8443/api/servers/${serverUUID}/ws`);
+    const logDiv = document.getElementById('log');
+    const input = document.getElementById('commandInput');
+
+    function log(message) {
+      logDiv.innerText += `\n${message}`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    ws.onopen = () => {
+      log("✅ WebSocket مفتوح. جاري التوثيق...");
+      ws.send(JSON.stringify({
+        event: "auth",
+        args: [token]
+      }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.event === "auth success") {
+        log("🔓 تم التوثيق بنجاح.");
+      } else if (data.event === "console output") {
+        log(data.args[0]);
+      } else {
+        log(`📨 حدث: ${data.event}`);
+      }
+    };
+
+    ws.onerror = (err) => {
+      log("❌ خطأ في WebSocket");
+      console.error(err);
+    };
+
+    function sendPower(state) {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          event: "set state",
+          args: [state]
+        }));
+        log(`🚀 تم إرسال أمر: ${state}`);
+      } else {
+        log("⚠️ WebSocket غير متصل.");
+      }
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && input.value.trim() !== "") {
+        ws.send(JSON.stringify({
+          event: "send command",
+          args: [input.value]
+        }));
+        log(`🖥️ أمر أُرسل: ${input.value}`);
+        input.value = "";
+      }
+    });
+  </script>
+
+</body>
+</html>
